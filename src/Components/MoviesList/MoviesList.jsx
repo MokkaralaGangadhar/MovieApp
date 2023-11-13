@@ -17,17 +17,34 @@ const MoviesList = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const key = useParams()
+  
   useEffect(() => {
-    searchKey(key.searchKey)
+    var searchParams = new URLSearchParams(location.search)
+    var queryParams = {}
+    for(const param of searchParams.keys() ){
+      const value = searchParams.get(param)
+      queryParams[param] = decodeURIComponent(value) 
+    }
+    if(queryParams){
+      if(queryParams.selected_genres){
+        var checkedList = JSON.parse(queryParams.selected_genres)
+        checkedList.map((val) => {
+          if(!checkGenres.includes(val)){
+            checkGenres.push(val)
+            console.log(checkedList)
+          }
 
-  }, [])
-  useEffect(() => {
+        } )
+      }
+    }
     searchKey(key.searchKey)
     Genre();
+    console.log("searchParams",searchParams)
+    // FilteredMovies();
 
-  }, [page])
+  }, [])
   const searchKey = async (key) => {
-    const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=1452e6e0980f76d9c09368379bd64adf&query=${key}&page=${pageNumber}`)
+    const { data } = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=1452e6e0980f76d9c09368379bd64adf&query=${key}&page=${pageNumber}&with_genres=${checkGenres ? checkGenres[0]:""}`)
     console.log("Search_List", data);
     setSearchList(data.results);
 
@@ -37,6 +54,14 @@ const MoviesList = () => {
     console.log("Genre_List", data);
     setGenreList(data.genres)
   }
+  // const FilteredMovies = async (key) => {
+  //   const { data } = await axios.get(` https://api.themoviedb.org/3/discover/movie?api_key=1452e6e0980f76d9c09368379bd64adf&language=en&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${checkGenres[0]}`)
+  //   console.log("FilteredMovies", data);
+  //   setSearchList(data.results);
+    
+  // }
+
+
 
 
 
