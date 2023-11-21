@@ -95,3 +95,7 @@
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
+.filtered-wrapper{
+  width: 400px !important;
+  
+}
