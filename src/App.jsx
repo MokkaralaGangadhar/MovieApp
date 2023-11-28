@@ -11,6 +11,7 @@ import Home from './Components/Home/Home';
 import MovieDetail from './Components/MovieDetail/MovieDetail';
 import MoviesList from './Components/MoviesList/MoviesList';
 import "bootstrap-icons/font/bootstrap-icons.css";
+import SearchList from './Components/SearchList/SearchList';
 
 function App() {
   return (
@@ -21,6 +22,9 @@ function App() {
       <Route exact path='/' element={<Home/>}/>
       <Route exact path="/movie-list/:searchKey" element={<MoviesList/>} />
       <Route exact path="/movie-details/:mid" element={<MovieDetail/>} />
+      <Route exact path="/search-list/" element={<SearchList/>} />
+      
+
     </Routes>
     </BrowserRouter>
     
