@@ -12,7 +12,7 @@ import MovieDetail from './Components/MovieDetail/MovieDetail';
 import MoviesList from './Components/MoviesList/MoviesList';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import SearchList from './Components/SearchList/SearchList';
-
+import NewListPage from './Components/NewListPage/NewListPage';
 function App() {
   return (
     <>
@@ -23,7 +23,7 @@ function App() {
       <Route exact path="/movie-list/:searchKey" element={<MoviesList/>} />
       <Route exact path="/movie-details/:mid" element={<MovieDetail/>} />
       <Route exact path="/search-list/" element={<SearchList/>} />
-      
+      <Route exact path="/new-list-page" element={<NewListPage/>} />
 
     </Routes>
     </BrowserRouter>
