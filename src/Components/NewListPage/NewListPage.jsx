@@ -7,6 +7,7 @@ const NewListPage = () => {
   const [searchMovies, setSearchMovies] = useState("");
   const [movieGenre, setMovieGenre] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
+  const[checkedGenreList,setCheckedGenreList] = useState([]);
 
   useEffect(() => {
     searchKey();
@@ -14,7 +15,8 @@ const NewListPage = () => {
   }, []);
   const searchKey = async () => {
     const { data } = await axios.get(
-      `https://api.themoviedb.org/3/discover/movie?api_key=1452e6e0980f76d9c09368379bd64adf&with_original_language=te&include_video=false&`
+      `https://api.themoviedb.org/3/discover/movie?api_key=1452e6e0980f76d9c09368379bd64adf&with_original_language=te&include_video=false&page=${pageNumber}&&with_genres=${
+        checkedGenreList ? checkedGenreList: ""}`
     );
     console.log(data);
     setSearchMovies(data.results);
@@ -29,6 +31,25 @@ const NewListPage = () => {
 
     console.log("Genre_List", data);
   };
+ 
+  const isChecked = (text) => {
+    if(!checkedGenreList.includes(text)){
+        checkedGenreList.push(text);
+    }
+    else if(checkedGenreList.includes(text)){
+        let index = checkedGenreList.indexOf(text);
+        checkedGenreList.splice(index,1)
+        console.log(index);
+    }
+    setCheckedGenreList(...checkedGenreList)
+    console.log(checkedGenreList);
+  }
+  useEffect(() => {
+    searchKey();
+
+  },[checkedGenreList])
+
+
 
   return (
     <>
@@ -65,6 +86,8 @@ const NewListPage = () => {
                           className="custom-control-input"
                         //   checked={false}
                           id={item.id}
+                          onClick={() => {isChecked(item.id)}
+                          }
                         />
                         <label className="custom-control-label" for={item.id}>
                           {item.name}
