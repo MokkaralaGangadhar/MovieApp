@@ -8,6 +8,7 @@ const NewListPage = () => {
   const [movieGenre, setMovieGenre] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const[checkedGenreList,setCheckedGenreList] = useState([]);
+  const [isFilter,setIsFilter] = useState(false);
 
   useEffect(() => {
     searchKey();
@@ -41,13 +42,13 @@ const NewListPage = () => {
         checkedGenreList.splice(index,1)
         console.log(index);
     }
-    setCheckedGenreList(...checkedGenreList)
+    setIsFilter(!isFilter);
     console.log(checkedGenreList);
   }
   useEffect(() => {
     searchKey();
 
-  },[checkedGenreList])
+  },[isFilter])
 
 
 
