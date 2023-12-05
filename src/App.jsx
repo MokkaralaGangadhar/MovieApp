@@ -13,6 +13,7 @@ import MoviesList from './Components/MoviesList/MoviesList';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import SearchList from './Components/SearchList/SearchList';
 import NewListPage from './Components/NewListPage/NewListPage';
+import Test from './Components/Test/Test';
 function App() {
   return (
     <>
@@ -24,6 +25,7 @@ function App() {
       <Route exact path="/movie-details/:mid" element={<MovieDetail/>} />
       <Route exact path="/search-list/" element={<SearchList/>} />
       <Route exact path="/new-list-page" element={<NewListPage/>} />
+      <Route exact path="/test" element={<Test/>} />
 
     </Routes>
     </BrowserRouter>

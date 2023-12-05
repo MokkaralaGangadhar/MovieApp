@@ -36,6 +36,7 @@ const NewListPage = () => {
   const isChecked = (text) => {
     if(!checkedGenreList.includes(text)){
         checkedGenreList.push(text);
+        console.log(text);
     }
     else if(checkedGenreList.includes(text)){
         let index = checkedGenreList.indexOf(text);
@@ -43,6 +44,7 @@ const NewListPage = () => {
         console.log(index);
     }
     setIsFilter(!isFilter);
+    alert(isFilter);
     console.log(checkedGenreList);
   }
   useEffect(() => {
