@@ -3,12 +3,17 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./NewListPage.css";
 import product from "../../Assets/Images/product.jpg";
+import { useNavigate, useLocation, createSearchParams, useSearchParams } from "react-router-dom";
 const NewListPage = () => {
   const [searchMovies, setSearchMovies] = useState("");
   const [movieGenre, setMovieGenre] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const[checkedGenreList,setCheckedGenreList] = useState([]);
   const [isFilter,setIsFilter] = useState(false);
+
+  const navigate = useNavigate();
+
+  const location = useLocation();
 
   useEffect(() => {
     searchKey();
@@ -43,14 +48,61 @@ const NewListPage = () => {
         checkedGenreList.splice(index,1)
         console.log(index);
     }
-    setIsFilter(!isFilter);
-    alert(isFilter);
+  
+    // setIsFilter(!isFilter);
+    // alert(isFilter);
     console.log(checkedGenreList);
   }
   useEffect(() => {
     searchKey();
 
   },[isFilter])
+
+  const GenresChecked = (id) => {
+    let isChecked = false;
+    if(checkedGenreList && checkedGenreList.length > 0){
+      if(checkedGenreList.includes(id)){
+        isChecked = true;
+
+      }
+    }
+    return isChecked;
+
+  }
+  
+  const checkGenresFilter = (e) => {
+    console.log(e.target);
+    const {value,checked} = e.target;
+    if(checked){
+      if(checkedGenreList.length > 0 ){
+        if(!checkedGenreList.includes(value)){
+          checkedGenreList.push(value);
+          console.log(value);
+      }
+      else if(checkedGenreList.includes(value)){
+          let index = checkedGenreList.indexOf(value);
+          checkedGenreList.splice(index,1)
+          console.log(index);
+      }
+
+      }
+    }
+    GenerateFilterQuery();
+
+  }
+  const GenerateFilterQuery = () => {
+    let GenreListQuery = checkedGenreList.length > 0 ? checkedGenreList : ''
+    const list = {};
+    if(GenreListQuery){
+      list['selectedGenres'] = JSON.stringify(GenreListQuery)
+
+    }
+    const options = {pathname:location.pathname,search:`?${createSearchParams(list)}`}
+    console.log(location.pathname);
+    navigate(options,{replace : true})
+    setIsFilter(!isFilter);
+    
+  }
 
 
 
@@ -87,10 +139,13 @@ const NewListPage = () => {
                         <input
                           type="checkbox"
                           className="custom-control-input"
-                        //   checked={false}
+                          checked = {GenresChecked(item.id)}
                           id={item.id}
-                          onClick={() => {isChecked(item.id)}
-                          }
+                          
+                          onChange = {(e) => {checkGenresFilter(e);isChecked(item.id)}}
+                          value={item.id}
+
+                          
                         />
                         <label className="custom-control-label" for={item.id}>
                           {item.name}
