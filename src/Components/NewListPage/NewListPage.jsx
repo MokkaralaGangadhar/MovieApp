@@ -142,7 +142,7 @@ const NewListPage = () => {
                           checked = {GenresChecked(item.id)}
                           id={item.id}
                           
-                          onChange = {(e) => {checkGenresFilter(e);isChecked(item.id)}}
+                          onChange = {(e) => {checkGenresFilter(e);}}
                           value={item.id}
 
                           
