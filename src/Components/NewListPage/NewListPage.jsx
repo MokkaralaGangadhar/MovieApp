@@ -10,12 +10,29 @@ const NewListPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const[checkedGenreList,setCheckedGenreList] = useState([]);
   const [isFilter,setIsFilter] = useState(false);
-
   const navigate = useNavigate();
-
   const location = useLocation();
-
   useEffect(() => {
+    var searchParams = new URLSearchParams(location.search);
+    var queryParams = {};
+    for (const param of searchParams.keys()) {
+      const value = searchParams.get(param);
+      queryParams[param] = value;
+    }
+    if (queryParams) {
+      if (queryParams.selectedGenres) {
+       
+        var checkedList =JSON.parse(queryParams.selectedGenres);
+        console.log("checkedList",typeof checkedList);
+        checkedList.map((val) => {
+            checkedGenreList.push(val);
+        });
+        // for(let i = 0; i < checkedList.length; i++){
+        //   let val = checkedList[i];
+        //   checkedGenreList.push(val);
+        // }
+      }
+    }
     searchKey();
     Genre();
   }, []);
@@ -34,7 +51,6 @@ const NewListPage = () => {
       `https://api.themoviedb.org/3/genre/movie/list?api_key=1452e6e0980f76d9c09368379bd64adf&language=en-US`
     );
     setMovieGenre(data.genres);
-
     console.log("Genre_List", data);
   };
  
@@ -55,38 +71,34 @@ const NewListPage = () => {
   }
   useEffect(() => {
     searchKey();
-
   },[isFilter])
-
   const GenresChecked = (id) => {
     let isChecked = false;
     if(checkedGenreList && checkedGenreList.length > 0){
       if(checkedGenreList.includes(id)){
         isChecked = true;
-
       }
     }
     return isChecked;
-
   }
   
   const checkGenresFilter = (e) => {
-    console.log(e.target);
     const {value,checked} = e.target;
+    console.log(e.target)
     if(checked){
       if(checkedGenreList.length > 0 ){
         if(!checkedGenreList.includes(value)){
           checkedGenreList.push(value);
-          console.log(value);
+          console.log("checkedValue",value);
       }
-      else if(checkedGenreList.includes(value)){
-          let index = checkedGenreList.indexOf(value);
-          checkedGenreList.splice(index,1)
-          console.log(index);
+      }else{
+        checkedGenreList.push(value);
       }
-
-      }
-    }
+    }else if(checkedGenreList.includes(value)){
+      let index = checkedGenreList.indexOf(value);
+      checkedGenreList.splice(index,1)
+      console.log(index);
+  }
     GenerateFilterQuery();
 
   }
@@ -95,17 +107,17 @@ const NewListPage = () => {
     const list = {};
     if(GenreListQuery){
       list['selectedGenres'] = JSON.stringify(GenreListQuery)
-
     }
+    // if(LanguageQuery){
+    //   list['selectedLnaguage'] = JSON.stringify(LanguageQuery)
+    // }
     const options = {pathname:location.pathname,search:`?${createSearchParams(list)}`}
+    // const options = {pathname:location.pathname,search:`?${list[selectedGenres]}&${list[selectedLnaguage]}`}
     console.log(location.pathname);
+    
     navigate(options,{replace : true})
     setIsFilter(!isFilter);
-    
   }
-
-
-
   return (
     <>
       <div className="container-fluid">
@@ -135,17 +147,14 @@ const NewListPage = () => {
                 {movieGenre.length > 0 &&
                   movieGenre.map((item) => {
                     return (
-                      <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
+                      <div className="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3" key={item.id}>
                         <input
                           type="checkbox"
                           className="custom-control-input"
-                          checked = {GenresChecked(item.id)}
+                          // checked = {GenresChecked(item.id)}
                           id={item.id}
-                          
                           onChange = {(e) => {checkGenresFilter(e);}}
                           value={item.id}
-
-                          
                         />
                         <label className="custom-control-label" for={item.id}>
                           {item.name}
@@ -156,7 +165,6 @@ const NewListPage = () => {
               </form>
             </div>
           </div>
-
           <div className="col-lg-9 col-md-8">
             <div className="row pb-3">
               <div className="col-12 pb-1">
