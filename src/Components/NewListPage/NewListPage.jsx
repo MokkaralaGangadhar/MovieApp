@@ -25,7 +25,12 @@ const NewListPage = () => {
         var checkedList =JSON.parse(queryParams.selectedGenres);
         console.log("checkedList",typeof checkedList);
         checkedList.map((val) => {
+          if(!checkedGenreList.includes(val)){
             checkedGenreList.push(val);
+            console.log(checkedList);
+            console.log(checkedGenreList);
+          }
+            
         });
         // for(let i = 0; i < checkedList.length; i++){
         //   let val = checkedList[i];
@@ -35,6 +40,7 @@ const NewListPage = () => {
     }
     searchKey();
     Genre();
+    
   }, []);
   const searchKey = async () => {
     const { data } = await axios.get(
@@ -75,12 +81,15 @@ const NewListPage = () => {
   const GenresChecked = (id) => {
     let isChecked = false;
     if(checkedGenreList && checkedGenreList.length > 0){
-      if(checkedGenreList.includes(id)){
-        isChecked = true;
+      if(checkedGenreList.includes(id.toString())){
+      
+        isChecked = true; 
       }
     }
+
     return isChecked;
   }
+  console.log(GenresChecked(28));
   
   const checkGenresFilter = (e) => {
     const {value,checked} = e.target;
@@ -151,7 +160,8 @@ const NewListPage = () => {
                         <input
                           type="checkbox"
                           className="custom-control-input"
-                          // checked = {GenresChecked(item.id)}
+                          checked = {GenresChecked(item.id)}
+                         
                           id={item.id}
                           onChange = {(e) => {checkGenresFilter(e);}}
                           value={item.id}
